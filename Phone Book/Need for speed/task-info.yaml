@@ -1,0 +1,84 @@
+type: edu
+custom_name: stage3
+files:
+- name: src/phonebook/Main.kt
+  visible: true
+  text: |
+    package phonebook
+
+    fun main() {
+        println("Hello, World!")
+    }
+  learner_created: false
+- name: test/PhoneBookTest.java
+  visible: false
+  text: "import org.hyperskill.hstest.stage.StageTest;\nimport org.hyperskill.hstest.testcase.CheckResult;\n\
+    import org.hyperskill.hstest.testcase.TestCase;\n\nimport java.util.ArrayList;\n\
+    import java.util.Arrays;\nimport java.util.List;\nimport java.util.regex.Matcher;\n\
+    import java.util.regex.Pattern;\n\npublic class PhoneBookTest extends StageTest\
+    \ {\n\n    private long timeOnTestStart;\n    \n    @Override\n    public List<TestCase>\
+    \ generate() {\n        timeOnTestStart = System.currentTimeMillis();\n      \
+    \  return Arrays.asList(\n                new TestCase().setTimeLimit(30 * 60\
+    \ * 1000)\n        );\n    }\n    \n    private CheckResult checkPhrases(String\
+    \ reply, String... phrases) {\n        reply = reply.toLowerCase();\n        for\
+    \ (String phrase : phrases) {\n            if (!reply.contains(phrase.toLowerCase()))\
+    \ {\n                return CheckResult.wrong(\"Not found the part `\" + phrase\
+    \ + \"` in your output.\");\n            }\n        }\n        return CheckResult.correct();\n\
+    \    }\n    \n    private List<String> findAll(String reply, String regex) {\n\
+    \        Matcher matcher = Pattern.compile(regex).matcher(reply);\n        List<String>\
+    \ groups = new ArrayList<>();\n        while (matcher.find()) {\n            groups.add(matcher.group());\n\
+    \        }\n        return groups;\n    }\n    \n    private String timeRegex\
+    \ = \"(\\\\d+)\\\\s*min.*?(\\\\d+)\\\\s*sec.*?(\\\\d+)\\\\s*ms\";\n    private\
+    \ Pattern timeRegexPattern = Pattern.compile(timeRegex);\n    \n    private long\
+    \ parseTimestamp(String timestamp) {\n        Matcher matcher = timeRegexPattern.matcher(timestamp);\n\
+    \        if (!matcher.matches() || matcher.groupCount() < 3) {\n            throw\
+    \ new IllegalStateException(\"???Not matches the line \" + timestamp);\n     \
+    \   }\n        int min = Integer.parseInt(matcher.group(1));\n        int sec\
+    \ = Integer.parseInt(matcher.group(2));\n        int ms = Integer.parseInt(matcher.group(3));\n\
+    \        return ms + sec * 1000 + min * 1000 * 60;\n    }\n    \n    @Override\n\
+    \    public CheckResult check(String reply, Object clue) {\n        long realTime\
+    \ = System.currentTimeMillis() - timeOnTestStart;\n        \n        reply = reply.toLowerCase();\n\
+    \        \n        CheckResult res = checkPhrases(reply,\n                \"found\"\
+    ,\n                \"min.\",\n                \"sec.\",\n                \"ms.\"\
+    ,\n                \"sorting time\",\n                \"searching time\",\n  \
+    \              \"linear search\",\n                \"bubble sort\",\n        \
+    \        \"jump search\",\n                \"quick sort\",\n                \"\
+    binary search\"\n        );\n        if (!res.isCorrect()) {\n            return\
+    \ res;\n        }\n        \n        List<String> stat1 = findAll(reply, \"500\
+    \ / 500\");\n        List<String> stat2 = findAll(reply, \"500/500\");\n     \
+    \   \n        if (stat1.size() + stat2.size() < 3) {\n            return CheckResult.wrong(\"\
+    Your output should contain 3 times the phrase `500 / 500`\");\n        }\n   \
+    \     \n        List<String> timestamps = findAll(reply, timeRegex);\n       \
+    \ if (timestamps.size() != 7) {\n            return CheckResult.wrong(\"Your output\
+    \ should contain 7 timer outputs, but found \"\n                    + timestamps.size());\n\
+    \        }\n        // should not fail..\n        long t1 = parseTimestamp(timestamps.get(0));\n\
+    \        long t2 = parseTimestamp(timestamps.get(1));\n        long t3 = parseTimestamp(timestamps.get(2));\n\
+    \        long t4 = parseTimestamp(timestamps.get(3));\n        long t5 = parseTimestamp(timestamps.get(4));\n\
+    \        long t6 = parseTimestamp(timestamps.get(5));\n        long t7 = parseTimestamp(timestamps.get(6));\n\
+    \        \n        if (Math.abs(t3 + t4 - t2) > 100) {\n            return CheckResult.wrong(\"\
+    Your third and fourth timer outputs in total (sorting and searching) \" +\n  \
+    \                  \"should be equal to the second (total search time).\");\n\
+    \        }\n        if (Math.abs(t6 + t7 - t5) > 100) {\n            return CheckResult.wrong(\"\
+    Your 6-th and 7-th timer outputs in total (sorting and searching) \" +\n     \
+    \               \"should be equal to the 5-th (total search time).\");\n     \
+    \   }\n        \n        long estimatedTime = t1 + t2 + t5;\n        if (realTime\
+    \ < 1000) {\n            return CheckResult.wrong(\"Your program completes too\
+    \ fast. Faster than a second!\");\n        }\n        \n        if (Math.abs(estimatedTime\
+    \ - realTime) > estimatedTime * 0.3) {\n            return CheckResult.wrong(\"\
+    Your estimated time is not similar to real time the program works. \" +\n    \
+    \                \"Real time: \" + realTime + \"ms, estimated time: \" + estimatedTime\
+    \ + \"ms\");\n        }\n        \n        return CheckResult.correct();\n   \
+    \ }\n}\n"
+  learner_created: false
+- name: src/phonebook/directory.txt
+  visible: true
+  learner_created: true
+- name: src/phonebook/find.txt
+  visible: true
+  learner_created: true
+feedback_link: https://hyperskill.org/learn/step/7750#comment
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Sat, 26 Mar 2022 04:06:18 UTC
+record: 5

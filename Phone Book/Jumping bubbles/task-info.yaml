@@ -1,0 +1,60 @@
+type: edu
+custom_name: stage2
+files:
+- name: src/phonebook/Main.kt
+  visible: true
+  text: |
+    package phonebook
+
+    fun main() {
+        println("Hello, World!")
+    }
+  learner_created: false
+- name: test/PhoneBookTest.java
+  visible: false
+  text: |
+    import org.hyperskill.hstest.stage.StageTest;
+    import org.hyperskill.hstest.testcase.CheckResult;
+    import org.hyperskill.hstest.testcase.TestCase;
+
+    import java.util.Arrays;
+    import java.util.List;
+
+    public class PhoneBookTest extends StageTest {
+
+        @Override
+        public List<TestCase> generate() {
+            return Arrays.asList(
+                new TestCase().setTimeLimit(30 * 60 * 1000)
+            );
+        }
+
+        @Override
+        public CheckResult check(String reply, Object clue) {
+            reply = reply.toLowerCase();
+            return new CheckResult(
+                reply.contains("start searching")
+                    && reply.contains("found")
+                    && reply.contains("min.")
+                    && reply.contains("sec.")
+                    && reply.contains("ms.")
+                    && reply.contains("sorting time")
+                    && reply.contains("searching time")
+                    && reply.contains("linear search")
+                    && reply.contains("bubble sort")
+                    && reply.contains("jump search"));
+        }
+    }
+  learner_created: false
+- name: src/phonebook/directory.txt
+  visible: true
+  learner_created: true
+- name: src/phonebook/find.txt
+  visible: true
+  learner_created: true
+feedback_link: https://hyperskill.org/learn/step/7749#comment
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Sat, 26 Mar 2022 03:19:39 UTC
+record: 6

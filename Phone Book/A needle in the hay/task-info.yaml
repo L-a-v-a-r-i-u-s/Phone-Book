@@ -1,0 +1,72 @@
+type: edu
+custom_name: stage1
+files:
+- name: src/phonebook/Main.kt
+  visible: true
+  text: |
+    package phonebook
+
+    fun main() {
+        println("Hello, World!")
+    }
+  learner_created: false
+- name: test/PhoneBookTest.java
+  visible: false
+  text: "import org.hyperskill.hstest.stage.StageTest;\nimport org.hyperskill.hstest.testcase.CheckResult;\n\
+    import org.hyperskill.hstest.testcase.TestCase;\n\nimport java.util.Arrays;\n\
+    import java.util.List;\nimport java.util.regex.Matcher;\nimport java.util.regex.Pattern;\n\
+    \npublic class PhoneBookTest extends StageTest {\n\n    private long timeOnTestStart;\n\
+    \    private String outputFirstTest = \"\";\n    \n    @Override\n    public List<TestCase>\
+    \ generate() {\n        timeOnTestStart = System.currentTimeMillis();\n      \
+    \  return Arrays.asList(\n                new TestCase<>().setTimeLimit(30 * 60\
+    \ * 1000),\n                new TestCase<>().setTimeLimit(30 * 60 * 1000).setCheckFunc((reply,\
+    \ attach) -> {\n                            if (reply.equals(outputFirstTest))\
+    \ {\n                                return CheckResult.wrong(\"Your program output\
+    \ is exactly the same during different runs. \" +\n                          \
+    \              \"Does your program just output a string?\");\n               \
+    \             }\n                            return CheckResult.correct();\n \
+    \                       }\n                )\n        );\n    }\n    \n    private\
+    \ CheckResult checkPhrases(String reply, String... phrases) {\n        reply =\
+    \ reply.toLowerCase();\n        for (String phrase : phrases) {\n            if\
+    \ (!reply.contains(phrase.toLowerCase())) {\n                return CheckResult.wrong(\"\
+    Not found the part `\" + phrase + \"` in your output.\");\n            }\n   \
+    \     }\n        return CheckResult.correct();\n    }\n    \n    private Pattern\
+    \ timePattern = Pattern.compile(\".*(\\\\d+)\\\\s*min.*?(\\\\d+)\\\\s*sec.*?(\\\
+    \\d+)\\\\s*ms.*\", Pattern.DOTALL);\n    \n    // returns -1 if not matches.\n\
+    \    private long getUserEstimatedTime(String reply) {\n        Matcher matcher\
+    \ = timePattern.matcher(reply);\n        if (!matcher.matches()) {\n         \
+    \   return -1;\n        }\n        int min = Integer.parseInt(matcher.group(1));\n\
+    \        int sec = Integer.parseInt(matcher.group(2));\n        int ms = Integer.parseInt(matcher.group(3));\n\
+    \        \n        return ms + sec * 1000 + min * 1000 * 60;\n    }\n    \n  \
+    \  @Override\n    public CheckResult check(String reply, Object clue) {\n    \
+    \    long realTime = System.currentTimeMillis() - timeOnTestStart;\n        timeOnTestStart\
+    \ = System.currentTimeMillis();\n        outputFirstTest = reply;\n//        System.out.println(\"\
+    Time delta: \" + realTime);\n        \n        if (!reply.contains(\"500 / 500\"\
+    ) && !reply.contains(\"500/500\")) {\n            return CheckResult.wrong(\"\
+    Your output should contain `500 / 500` fragment.\");\n        }\n        \n  \
+    \      CheckResult res = checkPhrases(reply, \"start searching\", \"found\",\n\
+    \                \"min.\", \"sec.\", \"ms.\");\n        if (!res.isCorrect())\
+    \ {\n            return res;\n        }\n        long estimatedTime = getUserEstimatedTime(reply);\n\
+    \        if (estimatedTime == -1) {\n            return CheckResult.wrong(\"Your\
+    \ output format doesn't contain numbers before min, sec, ms words.\");\n     \
+    \   }\n        \n        if (realTime < 1000) {\n            return CheckResult.wrong(\"\
+    Your program completes too fast. Faster than a second!\");\n        }\n      \
+    \  \n        double ratio = estimatedTime / (realTime + 0.0);\n        if (ratio\
+    \ < 0.5 || ratio > 1.5) {\n            return CheckResult.wrong(\"Too large difference\
+    \ between the real working time and your output. \" +\n                    \"\
+    Real program working time was \" + realTime + \" ms, and your output contained\
+    \ \" + estimatedTime + \"ms in total.\");\n        }\n        \n        return\
+    \ CheckResult.correct();\n    }\n}\n"
+  learner_created: false
+- name: src/phonebook/find.txt
+  visible: true
+  learner_created: true
+- name: src/phonebook/directory.txt
+  visible: true
+  learner_created: true
+feedback_link: https://hyperskill.org/learn/step/7748#comment
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Sat, 26 Mar 2022 02:51:04 UTC
+record: 4

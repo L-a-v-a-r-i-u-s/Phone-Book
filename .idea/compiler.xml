@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel target="17">
+      <module name="Phone_Book.Phone_Book-task-build-classes-java.main" target="11" />
+      <module name="Phone_Book.Phone_Book-task-build-classes-kotlin.main" target="11" />
+      <module name="Phone_Book.Phone_Book-task-build-generated-sources-annotationProcessor-java.main" target="11" />
+      <module name="Phone_Book.Phone_Book-task-build-generated-sources-headers-java.main" target="11" />
+      <module name="Phone_Book.Phone_Book-task-build-reports-tests.main" target="11" />
+      <module name="Phone_Book.Phone_Book-task-build-test-results.main" target="11" />
+      <module name="Phone_Book.Phone_Book-task-build-tmp.main" target="11" />
+      <module name="Phone_Book.Phone_Book-task.main" target="11" />
+      <module name="Phone_Book.util.main" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
